@@ -29,12 +29,15 @@ npm run dev
 ## Deploy
 
 Vercel, apontado pro domínio `domo.cafelabs.net` (subdomínio nu já liberado — o app
-migrou pra `app.domo.cafelabs.net`). Deploy e repositório remoto ainda não
-configurados.
+migrou pra `app.domo.cafelabs.net`). Repositório remoto criado
+(`CafeLabsDev/domo-landing`); deploy na Vercel ainda não configurado.
 
 ## Status
 
 - [x] Hero, features e seção de downloads.
 - [x] Botão "Web" ativo, linkando pro app (`app.domo.cafelabs.net`).
+- [ ] Download Windows — placeholder "em breve". O app Domo ainda não tem o target
+      Windows configurado no Flutter (só Android + Web hoje); a landing já reserva o
+      espaço antecipando o suporte.
 - [ ] Download Android — placeholder "em breve", depende de decidir onde hospedar o
       `.apk` de release.

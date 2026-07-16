@@ -83,7 +83,7 @@ export default function Home() {
 
         <section className="mx-auto max-w-5xl px-6 py-16">
           <h2 className="text-center text-2xl font-semibold">Baixe o Domo</h2>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <a
               href={WEB_APP_URL}
               target="_blank"
@@ -93,6 +93,10 @@ export default function Home() {
               <span className="text-base font-medium">Web</span>
               <span className="text-sm text-subtle">Disponível agora</span>
             </a>
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border p-6 text-center text-subtle">
+              <span className="text-base font-medium">Windows</span>
+              <span className="text-sm">Em breve</span>
+            </div>
             <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border p-6 text-center text-subtle">
               <span className="text-base font-medium">Android</span>
               <span className="text-sm">Em breve</span>
