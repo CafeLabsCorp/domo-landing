@@ -18,9 +18,15 @@ export const STATUS_TONE_CLASSES: Record<Status, string> = {
   carrinho: "bg-status-carrinho-container text-status-carrinho-container-foreground",
 };
 
-// Tem -> Em falta -> No carrinho -> Tem
-export const STATUS_CYCLE: Record<Status, Status> = {
+// Real app has two independent toggles, not one shared cycle: the pantry
+// screen only flips tem<->falta, the shopping list only flips falta<->carrinho,
+// and carrinho->tem happens in a batch ("atualizar despensa"), not a tap.
+export const PANTRY_TOGGLE: Record<"tem" | "falta", Status> = {
   tem: "falta",
+  falta: "tem",
+};
+
+export const CART_TOGGLE: Record<"falta" | "carrinho", Status> = {
   falta: "carrinho",
-  carrinho: "tem",
+  carrinho: "falta",
 };

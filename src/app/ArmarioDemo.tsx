@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { STATUS_CYCLE, STATUS_LABEL, STATUS_TONE_CLASSES, type Status } from "./statuses";
+import { PANTRY_TOGGLE, CART_TOGGLE, STATUS_LABEL, STATUS_TONE_CLASSES, type Status } from "./statuses";
 
 type PantryItem = {
   id: string;
@@ -26,15 +26,40 @@ export default function ArmarioDemo() {
   const [items, setItems] = useState<PantryItem[]>(SEED);
   const [liveMessage, setLiveMessage] = useState("");
 
-  function cycleStatus(id: string) {
+  // Pantry tap only flips tem<->falta — mirrors dispensa_page.dart, which
+  // never lets you set noCarrinho from that screen.
+  function togglePantryStatus(id: string) {
     setItems((current) =>
       current.map((item) => {
-        if (item.id !== id) return item;
-        const nextStatus = STATUS_CYCLE[item.status];
+        if (item.id !== id || item.status === "carrinho") return item;
+        const nextStatus = PANTRY_TOGGLE[item.status];
         setLiveMessage(`${item.name} marcado como ${STATUS_LABEL[nextStatus]}.`);
         return { ...item, status: nextStatus };
       }),
     );
+  }
+
+  // Shopping-list tap only flips falta<->carrinho — mirrors mercado_page.dart.
+  function toggleCartStatus(id: string) {
+    setItems((current) =>
+      current.map((item) => {
+        if (item.id !== id || item.status === "tem") return item;
+        const nextStatus = CART_TOGGLE[item.status];
+        setLiveMessage(`${item.name} marcado como ${STATUS_LABEL[nextStatus]}.`);
+        return { ...item, status: nextStatus };
+      }),
+    );
+  }
+
+  // Mirrors the real app's "Atualizar dispensa" button: closes the trip by
+  // batch-moving every carrinho item back to tem in one action, not a tap.
+  function atualizarDespensa() {
+    setItems((current) =>
+      current.map((item) =>
+        item.status === "carrinho" ? { ...item, status: "tem" } : item,
+      ),
+    );
+    setLiveMessage("Dispensa atualizada.");
   }
 
   function reset() {
@@ -42,7 +67,11 @@ export default function ArmarioDemo() {
     setLiveMessage("Demo reiniciada.");
   }
 
+  // Carrinho items disappear from the pantry, same as dispensa_page.dart's
+  // `where((i) => i.status != ItemStatus.noCarrinho)` filter.
+  const pantryItems = items.filter((item) => item.status !== "carrinho");
   const shoppingList = items.filter((item) => item.status !== "tem");
+  const hasCartItems = items.some((item) => item.status === "carrinho");
 
   return (
     <div className="mt-10">
@@ -58,8 +87,8 @@ export default function ArmarioDemo() {
             Despensa
           </h3>
           <ul className="mt-4 divide-y divide-border">
-            {items.map((item) => {
-              const nextStatus = STATUS_CYCLE[item.status];
+            {pantryItems.map((item) => {
+              const nextStatus = PANTRY_TOGGLE[item.status as "tem" | "falta"];
               return (
                 <li key={item.id}>
                   {/* The whole row is the button: it clears the 44px tap
@@ -67,7 +96,7 @@ export default function ArmarioDemo() {
                       visual chip past its 32px (h-8) spec size. */}
                   <button
                     type="button"
-                    onClick={() => cycleStatus(item.id)}
+                    onClick={() => togglePantryStatus(item.id)}
                     aria-label={`${item.name}: ${STATUS_LABEL[item.status]}. Toque para alternar para ${STATUS_LABEL[nextStatus]}.`}
                     className="flex min-h-11 w-full items-center justify-between gap-3 rounded-[6px] py-1.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
@@ -97,22 +126,41 @@ export default function ArmarioDemo() {
             </p>
           ) : (
             <ul className="mt-4 divide-y divide-border">
-              {shoppingList.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between gap-3 py-1.5"
-                >
-                  <span className="text-sm font-medium text-foreground">
-                    {item.name}
-                  </span>
-                  <span
-                    className={`inline-flex h-8 items-center rounded-[6px] px-3 text-[0.75rem] font-bold ${STATUS_TONE_CLASSES[item.status]}`}
-                  >
-                    {STATUS_LABEL[item.status]}
-                  </span>
-                </li>
-              ))}
+              {shoppingList.map((item) => {
+                const nextStatus = CART_TOGGLE[item.status as "falta" | "carrinho"];
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => toggleCartStatus(item.id)}
+                      aria-label={`${item.name}: ${STATUS_LABEL[item.status]}. Toque para alternar para ${STATUS_LABEL[nextStatus]}.`}
+                      className="flex min-h-11 w-full items-center justify-between gap-3 rounded-[6px] py-1.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    >
+                      <span
+                        className={`text-sm font-medium text-foreground ${item.status === "carrinho" ? "text-subtle line-through" : ""}`}
+                      >
+                        {item.name}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={`inline-flex h-8 items-center rounded-[6px] px-3 text-[0.75rem] font-bold transition-colors duration-150 motion-reduce:transition-none ${STATUS_TONE_CLASSES[item.status]}`}
+                      >
+                        {STATUS_LABEL[item.status]}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
+          )}
+          {hasCartItems && (
+            <button
+              type="button"
+              onClick={atualizarDespensa}
+              className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              Atualizar despensa
+            </button>
           )}
         </div>
       </div>
