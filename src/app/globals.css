@@ -1,14 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f5ef;
+  --background: #eef1f1; /* "ceramic stone" canvas */
   --surface: #ffffff;
-  --foreground: #1c1b18;
-  --muted: #4a4740;
-  --subtle: #7b7870;
-  --border: rgba(28, 27, 24, 0.1);
-  --primary: #4a7c59;
-  --primary-foreground: #ffffff;
+  --foreground: #1b2024; /* inkPrimary, on background: 14.46:1 */
+  --muted: #4f5a61; /* inkSecondary, on background: 6.23:1 */
+  --subtle: #5a6469; /* inkSubtle, on background: 5.34:1 */
+  --border: rgba(27, 32, 36, 0.12); /* inkPrimary @ 12% — decorative hairline only */
+  --outline: #5c6b78; /* real component outlines, on background: 4.83:1 */
+
+  --primary: #2c4a7c; /* Azul Louça */
+  --primary-foreground: #ffffff; /* onPrimary: 8.83:1 */
+  --primary-container: #d7e1f0;
+  --primary-container-foreground: #16233d; /* onPrimaryContainer: 11.86:1 */
+
+  --secondary: #63584a; /* Grafite Quente */
+
+  --tertiary: #8a5f12; /* Mostarda — sparing use, standout/collective moments only */
+  --tertiary-foreground: #ffffff; /* onTertiary: 5.64:1 */
+  --tertiary-container: #f4e7c8;
+  --tertiary-container-foreground: #3e2e10; /* onTertiaryContainer: 10.67:1 */
+
+  --status-tem: #286b5c;
+  --status-tem-container: #d9ede7;
+  --status-tem-container-foreground: #124338; /* 9.13:1 */
+
+  --status-falta: #b83a2a;
+  --status-falta-container: #f9dcd6;
+  --status-falta-container-foreground: #5a2318; /* 9.62:1 */
+
+  --status-carrinho: #8a5f12; /* = tertiary, deliberately */
+  --status-carrinho-container: #f4e7c8;
+  --status-carrinho-container-foreground: #3e2e10; /* 10.67:1 */
+
+  /* Member colors — only #1/#2/#3 are used on the landing (hero avatar stack). */
+  --member-1: #2c4a7c; /* Azul Louça, white text: 8.83:1 */
+  --member-2: #8a5f12; /* Mostarda, white text: 5.64:1 */
+  --member-3: #286b5c; /* Verde Jade, white text: 6.27:1 */
 }
 
 @theme inline {
@@ -18,21 +46,77 @@
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
   --color-border: var(--border);
+  --color-outline: var(--outline);
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --font-sans: var(--font-inter);
+  --color-primary-container: var(--primary-container);
+  --color-primary-container-foreground: var(--primary-container-foreground);
+
+  --color-secondary: var(--secondary);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-tertiary-container-foreground: var(--tertiary-container-foreground);
+
+  --color-status-tem: var(--status-tem);
+  --color-status-tem-container: var(--status-tem-container);
+  --color-status-tem-container-foreground: var(--status-tem-container-foreground);
+
+  --color-status-falta: var(--status-falta);
+  --color-status-falta-container: var(--status-falta-container);
+  --color-status-falta-container-foreground: var(--status-falta-container-foreground);
+
+  --color-status-carrinho: var(--status-carrinho);
+  --color-status-carrinho-container: var(--status-carrinho-container);
+  --color-status-carrinho-container-foreground: var(--status-carrinho-container-foreground);
+
+  --color-member-1: var(--member-1);
+  --color-member-2: var(--member-2);
+  --color-member-3: var(--member-3);
+
+  --font-serif: var(--font-bitter);
+  --font-sans: var(--font-manrope);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a1c1e;
-    --surface: #2b2d30;
-    --foreground: #e5e2da;
-    --muted: #cbc8bf;
-    --subtle: #958f87;
-    --border: rgba(255, 255, 255, 0.1);
-    --primary: #87d7a2;
-    --primary-foreground: #003921;
+    --background: #12171c;
+    --surface: #1b2128;
+    --foreground: #edeff1;
+    --muted: #b9c1c7;
+    --subtle: #8f9aa1;
+    --border: rgba(237, 239, 241, 0.12);
+    --outline: #8d9aa6;
+
+    --primary: #9bb8de;
+    --primary-foreground: #16233d;
+    --primary-container: #223a61;
+    --primary-container-foreground: #c9d9f0;
+
+    --secondary: #c9bba8;
+
+    --tertiary: #e0b84a;
+    --tertiary-foreground: #3e2e10;
+    --tertiary-container: #4a3a14;
+    --tertiary-container-foreground: #f4e0a8;
+
+    --status-tem: #6fc2ac;
+    --status-tem-container: #163f35;
+    --status-tem-container-foreground: #bee8dd;
+
+    --status-falta: #e8897a;
+    --status-falta-container: #4a1b14;
+    --status-falta-container-foreground: #f7cfc5;
+
+    --status-carrinho: #e0b84a;
+    --status-carrinho-container: #4a3a14;
+    --status-carrinho-container-foreground: #f4e0a8;
+
+    --member-1: #9bb8de;
+    --member-2: #e0b84a;
+    --member-3: #6fc2ac;
   }
 }
 
