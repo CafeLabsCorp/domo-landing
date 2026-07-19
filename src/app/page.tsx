@@ -10,8 +10,8 @@ const CARD_CLASSES =
 export default function Home() {
   return (
     <>
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <header className="h-16 w-full border-b border-border">
+        <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <Image src="/domo-logo.svg" alt="Domo" width={32} height={16} />
             <span className="font-serif text-lg font-bold text-foreground">
@@ -33,7 +33,7 @@ export default function Home() {
         {/* Hero — asymmetric two-column split. Text stays first in DOM
             order at every width; only the visual panel's placement responds
             to viewport, so reading order never depends on layout. */}
-        <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:py-24">
+        <section className="mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl items-center gap-10 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div>
             <Tag variant="kicker">Gestão doméstica compartilhada</Tag>
             <h1 className="mt-5 text-[clamp(2.1rem,4vw,3.1rem)] font-bold leading-[1.12] font-serif text-foreground">
@@ -55,9 +55,10 @@ export default function Home() {
               </a>
               <a
                 href="#como-funciona"
-                className="text-sm font-medium text-muted underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="scroll-cue inline-flex items-center gap-1 text-sm font-medium text-muted underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
-                veja como funciona ↓
+                veja como funciona
+                <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
@@ -101,6 +102,59 @@ export default function Home() {
               <span className="text-sm text-subtle">
                 Compartilhado com a casa
               </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Baixe o Domo — immediately below the hero (Café Labs landing
+            structural rule 3: quick access to "use the product" can't be
+            buried at the bottom of the page). */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <Tag variant="kicker">Baixe o Domo</Tag>
+            <h2 className="mt-4 text-[2rem] font-bold font-serif text-foreground">
+              Leve o armário com você
+            </h2>
+            <div className="mt-10 grid gap-6 sm:grid-cols-3">
+              <a
+                href={WEB_APP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center transition-colors hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-3.5 w-0.5 rounded-full bg-primary"
+                />
+                <span className="font-serif text-base font-bold text-foreground">
+                  Web
+                </span>
+                <Tag tone="primary">Disponível agora</Tag>
+              </a>
+              <div
+                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-3.5 w-0.5 rounded-full bg-subtle"
+                />
+                <span className="font-serif text-base font-bold text-foreground">
+                  Windows
+                </span>
+                <Tag tone="neutral">Em breve</Tag>
+              </div>
+              <div
+                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-3.5 w-0.5 rounded-full bg-subtle"
+                />
+                <span className="font-serif text-base font-bold text-foreground">
+                  Android
+                </span>
+                <Tag tone="neutral">Em breve</Tag>
+              </div>
             </div>
           </div>
         </section>
@@ -221,56 +275,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Baixe o Domo */}
-        <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-6 py-16">
-            <Tag variant="kicker">Baixe o Domo</Tag>
-            <h2 className="mt-4 text-[2rem] font-bold font-serif text-foreground">
-              Leve o armário com você
-            </h2>
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              <a
-                href={WEB_APP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center transition-colors hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-primary"
-                />
-                <span className="font-serif text-base font-bold text-foreground">
-                  Web
-                </span>
-                <Tag tone="primary">Disponível agora</Tag>
-              </a>
-              <div
-                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-subtle"
-                />
-                <span className="font-serif text-base font-bold text-foreground">
-                  Windows
-                </span>
-                <Tag tone="neutral">Em breve</Tag>
-              </div>
-              <div
-                className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-subtle"
-                />
-                <span className="font-serif text-base font-bold text-foreground">
-                  Android
-                </span>
-                <Tag tone="neutral">Em breve</Tag>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer className="border-t border-border">
