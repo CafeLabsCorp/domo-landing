@@ -1,8 +1,16 @@
 # Domo landing — redesign spec ("Armário Aberto")
 
-Status: approved direction, ready for implementation by `frontend-web`.
-Scope owner: UX/UI design. Implementation owner: frontend-web — everything
-under `src/app/` is theirs to touch. I did not edit any file under `src/`.
+Status: **implementado** (commits `d7ed472`, `ab0f7bd`, `ea1d6ed`, `80e1f0d`
+em `src/app/`) — este documento é mantido como a referência viva de tokens
+de design (cor, tipografia, forma) e do raciocínio por trás de cada decisão,
+não só como spec histórica. Ao alterar um token de cor/tipografia no código,
+atualizar aqui também.
+
+Texto original abaixo, escrito como spec pré-implementação pela especialista
+de design (scope owner) para a `frontend-web` (implementation owner)
+executar — mantido como está por ainda descrever fielmente o que foi
+construído; ver `docs/ARQUITETURA.md` para como o modelo de estado da demo
+funciona na prática.
 
 This replaces the current landing (`src/app/page.tsx` + `globals.css`), which
 was built by copying the old "Sage Home" green palette and Inter 1:1 onto a
