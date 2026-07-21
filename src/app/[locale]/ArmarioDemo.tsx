@@ -1,30 +1,44 @@
 "use client";
 
 import { useState } from "react";
-import { PANTRY_TOGGLE, CART_TOGGLE, STATUS_LABEL, STATUS_TONE_CLASSES, type Status } from "./statuses";
+import { useTranslations } from "next-intl";
+import { PANTRY_TOGGLE, CART_TOGGLE, STATUS_TONE_CLASSES, type Status } from "./statuses";
 
 type PantryItem = {
   id: string;
-  name: string;
   status: Status;
 };
 
 // Seeded non-empty and already mixed, so the payoff (a live shopping list)
-// is visible before any interaction — unlike a zero-state demo.
+// is visible before any interaction — unlike a zero-state demo. Names come
+// from the "Demo" translation namespace (itemLeite/itemCafe/...), keyed by
+// id here so they stay locale-independent identifiers.
 const SEED: PantryItem[] = [
-  { id: "leite", name: "Leite", status: "tem" },
-  { id: "cafe", name: "Café", status: "falta" },
-  { id: "detergente", name: "Detergente", status: "carrinho" },
-  { id: "papel-toalha", name: "Papel toalha", status: "falta" },
-  { id: "arroz", name: "Arroz", status: "tem" },
+  { id: "leite", status: "tem" },
+  { id: "cafe", status: "falta" },
+  { id: "detergente", status: "carrinho" },
+  { id: "papelToalha", status: "falta" },
+  { id: "arroz", status: "tem" },
 ];
 
 const CARD_CLASSES =
   "rounded-[10px] border border-border bg-surface p-6 shadow-[0_1px_2px_rgba(0,0,0,0.05),0_4px_14px_rgba(0,0,0,0.06)]";
 
 export default function ArmarioDemo() {
+  const t = useTranslations("Demo");
+  const tStatus = useTranslations("Status");
   const [items, setItems] = useState<PantryItem[]>(SEED);
   const [liveMessage, setLiveMessage] = useState("");
+
+  const itemName = (id: string) => {
+    const key = `item${id.charAt(0).toUpperCase()}${id.slice(1)}` as
+      | "itemLeite"
+      | "itemCafe"
+      | "itemDetergente"
+      | "itemPapelToalha"
+      | "itemArroz";
+    return t(key);
+  };
 
   // Pantry tap only flips tem<->falta — mirrors dispensa_page.dart, which
   // never lets you set noCarrinho from that screen.
@@ -33,7 +47,7 @@ export default function ArmarioDemo() {
       current.map((item) => {
         if (item.id !== id || item.status === "carrinho") return item;
         const nextStatus = PANTRY_TOGGLE[item.status];
-        setLiveMessage(`${item.name} marcado como ${STATUS_LABEL[nextStatus]}.`);
+        setLiveMessage(t("itemMarkedAs", { name: itemName(id), status: tStatus(nextStatus) }));
         return { ...item, status: nextStatus };
       }),
     );
@@ -45,7 +59,7 @@ export default function ArmarioDemo() {
       current.map((item) => {
         if (item.id !== id || item.status === "tem") return item;
         const nextStatus = CART_TOGGLE[item.status];
-        setLiveMessage(`${item.name} marcado como ${STATUS_LABEL[nextStatus]}.`);
+        setLiveMessage(t("itemMarkedAs", { name: itemName(id), status: tStatus(nextStatus) }));
         return { ...item, status: nextStatus };
       }),
     );
@@ -59,12 +73,12 @@ export default function ArmarioDemo() {
         item.status === "carrinho" ? { ...item, status: "tem" } : item,
       ),
     );
-    setLiveMessage("Dispensa atualizada.");
+    setLiveMessage(t("pantryUpdated"));
   }
 
   function reset() {
     setItems(SEED);
-    setLiveMessage("Demo reiniciada.");
+    setLiveMessage(t("demoReset"));
   }
 
   // Carrinho items disappear from the pantry, same as dispensa_page.dart's
@@ -84,7 +98,7 @@ export default function ArmarioDemo() {
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
         <div className={CARD_CLASSES}>
           <h3 className="font-serif text-[1.05rem] font-bold text-foreground">
-            Despensa
+            {t("pantryTitle")}
           </h3>
           <ul className="mt-4 divide-y divide-border">
             {pantryItems.map((item) => {
@@ -97,17 +111,21 @@ export default function ArmarioDemo() {
                   <button
                     type="button"
                     onClick={() => togglePantryStatus(item.id)}
-                    aria-label={`${item.name}: ${STATUS_LABEL[item.status]}. Toque para alternar para ${STATUS_LABEL[nextStatus]}.`}
+                    aria-label={t("toggleAriaLabel", {
+                      name: itemName(item.id),
+                      status: tStatus(item.status),
+                      nextStatus: tStatus(nextStatus),
+                    })}
                     className="flex min-h-11 w-full items-center justify-between gap-3 rounded-[6px] py-1.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     <span className="text-sm font-medium text-foreground">
-                      {item.name}
+                      {itemName(item.id)}
                     </span>
                     <span
                       aria-hidden="true"
                       className={`inline-flex h-8 items-center rounded-[6px] px-3 text-[0.75rem] font-bold transition-colors duration-150 motion-reduce:transition-none ${STATUS_TONE_CLASSES[item.status]}`}
                     >
-                      {STATUS_LABEL[item.status]}
+                      {tStatus(item.status)}
                     </span>
                   </button>
                 </li>
@@ -118,11 +136,11 @@ export default function ArmarioDemo() {
 
         <div className={CARD_CLASSES}>
           <h3 className="font-serif text-[1.05rem] font-bold text-foreground">
-            Lista de compras
+            {t("shoppingListTitle")}
           </h3>
           {shoppingList.length === 0 ? (
             <p className="mt-4 text-sm text-subtle">
-              Nada em falta — a lista está vazia.
+              {t("emptyShoppingList")}
             </p>
           ) : (
             <ul className="mt-4 divide-y divide-border">
@@ -133,19 +151,23 @@ export default function ArmarioDemo() {
                     <button
                       type="button"
                       onClick={() => toggleCartStatus(item.id)}
-                      aria-label={`${item.name}: ${STATUS_LABEL[item.status]}. Toque para alternar para ${STATUS_LABEL[nextStatus]}.`}
+                      aria-label={t("toggleAriaLabel", {
+                        name: itemName(item.id),
+                        status: tStatus(item.status),
+                        nextStatus: tStatus(nextStatus),
+                      })}
                       className="flex min-h-11 w-full items-center justify-between gap-3 rounded-[6px] py-1.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     >
                       <span
                         className={`text-sm font-medium text-foreground ${item.status === "carrinho" ? "text-subtle line-through" : ""}`}
                       >
-                        {item.name}
+                        {itemName(item.id)}
                       </span>
                       <span
                         aria-hidden="true"
                         className={`inline-flex h-8 items-center rounded-[6px] px-3 text-[0.75rem] font-bold transition-colors duration-150 motion-reduce:transition-none ${STATUS_TONE_CLASSES[item.status]}`}
                       >
-                        {STATUS_LABEL[item.status]}
+                        {tStatus(item.status)}
                       </span>
                     </button>
                   </li>
@@ -159,7 +181,7 @@ export default function ArmarioDemo() {
               onClick={atualizarDespensa}
               className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              Atualizar despensa
+              {t("updatePantryButton")}
             </button>
           )}
         </div>
@@ -167,14 +189,14 @@ export default function ArmarioDemo() {
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <p className="text-sm text-subtle">
-          Toque pra simular — prévia local, os valores não são salvos.
+          {t("hint")}
         </p>
         <button
           type="button"
           onClick={reset}
           className="inline-flex h-10 items-center justify-center rounded-full border border-outline px-5 text-sm font-medium text-foreground transition-colors hover:bg-primary-container hover:text-primary-container-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          Reiniciar demo
+          {t("resetButton")}
         </button>
       </div>
     </div>

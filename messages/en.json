@@ -1,0 +1,69 @@
+{
+  "Metadata": {
+    "title": "Domo — shared household management",
+    "description": "Organize your household's pantry and shopping list together, with a status per item. Free app by Café Labs, available on the web and Android."
+  },
+  "Status": {
+    "tem": "Have it",
+    "falta": "Missing",
+    "carrinho": "In cart"
+  },
+  "Header": {
+    "brandBy": "by Café Labs"
+  },
+  "Hero": {
+    "kicker": "Shared household management",
+    "title": "The whole house knows what's in the pantry.",
+    "description": "Every item marked <tem>Have it</tem>, <falta>Missing</falta>, or <carrinho>In cart</carrinho> — no duplicating everything in a group chat or a separate spreadsheet.",
+    "ctaOpenApp": "Open Domo on the web",
+    "ctaHowItWorks": "see how it works",
+    "previewLeite": "Milk",
+    "previewCafe": "Coffee",
+    "previewDetergente": "Dish soap",
+    "sharedWithHouse": "Shared with the house"
+  },
+  "Download": {
+    "kicker": "Get Domo",
+    "title": "Take the pantry with you",
+    "webLabel": "Web",
+    "webAvailable": "Available now",
+    "windowsLabel": "Windows",
+    "androidLabel": "Android",
+    "comingSoon": "Coming soon"
+  },
+  "HowItWorks": {
+    "kicker": "How it works",
+    "title": "The way your household actually uses it",
+    "step1Title": "Pantry by status",
+    "step1Body": "Every item in the house marked Have it, Missing, or In cart — one tap in the app is all it takes to keep the pantry current.",
+    "step2Title": "Automatic shopping list",
+    "step2Body": "The shopping list is born straight from the pantry: anything not marked Have it already shows up ready to buy, no need to add it again somewhere else.",
+    "shoppingListLabel": "Shopping list",
+    "previewPapelToalha": "Paper towels",
+    "step3Title": "Household, together",
+    "step3Body": "Invite whoever lives with you with a 6-character code and manage members and roles — the pantry becomes the whole house's, not just yours."
+  },
+  "Demo": {
+    "kicker": "Try it out",
+    "title": "Rearrange the shelf",
+    "description": "Tap a pantry item to switch its status and watch the shopping list update itself — the same way it works in the real app.",
+    "pantryTitle": "Pantry",
+    "shoppingListTitle": "Shopping list",
+    "emptyShoppingList": "Nothing missing — the list is empty.",
+    "updatePantryButton": "Update pantry",
+    "hint": "Tap to try it out — local preview, nothing is saved.",
+    "resetButton": "Reset demo",
+    "toggleAriaLabel": "{name}: {status}. Tap to switch to {nextStatus}.",
+    "itemMarkedAs": "{name} marked as {status}.",
+    "pantryUpdated": "Pantry updated.",
+    "demoReset": "Demo reset.",
+    "itemLeite": "Milk",
+    "itemCafe": "Coffee",
+    "itemDetergente": "Dish soap",
+    "itemPapelToalha": "Paper towels",
+    "itemArroz": "Rice"
+  },
+  "Footer": {
+    "brand": "Domo — a Café Labs product"
+  }
+}

@@ -4,11 +4,9 @@
 
 export type Status = "tem" | "falta" | "carrinho";
 
-export const STATUS_LABEL: Record<Status, string> = {
-  tem: "Tem",
-  falta: "Em falta",
-  carrinho: "No carrinho",
-};
+// Status display labels come from next-intl's "Status" namespace (keys match
+// these ids exactly: tem/falta/carrinho) via useTranslations/getTranslations
+// — not a plain constant here, since the label needs to be locale-aware.
 
 // Container-fill / on-container-text pairs, already contrast-checked in the
 // app spec (9–11:1) — see docs/DESIGN.md §2.

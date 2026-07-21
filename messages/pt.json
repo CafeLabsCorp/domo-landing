@@ -1,0 +1,69 @@
+{
+  "Metadata": {
+    "title": "Domo — gestão doméstica em grupo",
+    "description": "Organize a despensa e a lista de compras da casa em grupo, com status por item. App gratuito da Café Labs, disponível na web e Android."
+  },
+  "Status": {
+    "tem": "Tem",
+    "falta": "Em falta",
+    "carrinho": "No carrinho"
+  },
+  "Header": {
+    "brandBy": "por Café Labs"
+  },
+  "Hero": {
+    "kicker": "Gestão doméstica compartilhada",
+    "title": "A casa inteira sabe o que tem no armário.",
+    "description": "Cada item marcado como <tem>Tem</tem>, <falta>Em falta</falta> ou <carrinho>No carrinho</carrinho> — sem duplicar tudo num grupo de mensagens ou numa planilha à parte.",
+    "ctaOpenApp": "Abrir Domo na web",
+    "ctaHowItWorks": "veja como funciona",
+    "previewLeite": "Leite",
+    "previewCafe": "Café",
+    "previewDetergente": "Detergente",
+    "sharedWithHouse": "Compartilhado com a casa"
+  },
+  "Download": {
+    "kicker": "Baixe o Domo",
+    "title": "Leve o armário com você",
+    "webLabel": "Web",
+    "webAvailable": "Disponível agora",
+    "windowsLabel": "Windows",
+    "androidLabel": "Android",
+    "comingSoon": "Em breve"
+  },
+  "HowItWorks": {
+    "kicker": "Como funciona",
+    "title": "Do jeito que a casa realmente usa",
+    "step1Title": "Dispensa por status",
+    "step1Body": "Cada item da casa marcado como Tem, Em falta ou No carrinho — um toque no app é tudo que precisa pra manter a dispensa em dia.",
+    "step2Title": "Lista de compras automática",
+    "step2Body": "A lista de compras nasce direto da dispensa: tudo que não está marcado como Tem já aparece pronto pra comprar, sem precisar adicionar de novo em outro lugar.",
+    "shoppingListLabel": "Lista de compras",
+    "previewPapelToalha": "Papel toalha",
+    "step3Title": "Casa em grupo",
+    "step3Body": "Convide quem mora com você por um código de 6 caracteres e gerencie membros e cargos — a dispensa passa a ser da casa inteira, não só sua."
+  },
+  "Demo": {
+    "kicker": "Experimente",
+    "title": "Mexa na prateleira",
+    "description": "Toque num item da dispensa pra alternar o status e veja a lista de compras se atualizar sozinha — do mesmo jeito que ela nasce no app de verdade.",
+    "pantryTitle": "Despensa",
+    "shoppingListTitle": "Lista de compras",
+    "emptyShoppingList": "Nada em falta — a lista está vazia.",
+    "updatePantryButton": "Atualizar despensa",
+    "hint": "Toque pra simular — prévia local, os valores não são salvos.",
+    "resetButton": "Reiniciar demo",
+    "toggleAriaLabel": "{name}: {status}. Toque para alternar para {nextStatus}.",
+    "itemMarkedAs": "{name} marcado como {status}.",
+    "pantryUpdated": "Dispensa atualizada.",
+    "demoReset": "Demo reiniciada.",
+    "itemLeite": "Leite",
+    "itemCafe": "Café",
+    "itemDetergente": "Detergente",
+    "itemPapelToalha": "Papel toalha",
+    "itemArroz": "Arroz"
+  },
+  "Footer": {
+    "brand": "Domo — um produto Café Labs"
+  }
+}
