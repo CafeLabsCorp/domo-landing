@@ -1,60 +1,62 @@
+**[Leia em Português](DEPLOY.pt-br.md)**
+
 # Deploy — domo-landing
 
-## Onde roda
+## Where it runs
 
 - **Hosting:** Vercel.
-- **Domínio:** [`domo.cafelabs.net`](https://domo.cafelabs.net) (subdomínio
-  nu da Café Labs, dedicado à landing — o app real vive em
-  `app.domo.cafelabs.net`, hospedado à parte no Firebase Hosting; ver
-  `domo/docs/DEPLOY.md` no repo do app).
-- **Repositório remoto:** [`CafeLabsCorp/domo-landing`](https://github.com/CafeLabsCorp/domo-landing)
-  (organização Café Labs, não conta pessoal).
+- **Domain:** [`domo.cafelabs.net`](https://domo.cafelabs.net) (a bare Café
+  Labs subdomain, dedicated to the landing — the real app lives at
+  `app.domo.cafelabs.net`, hosted separately on Firebase Hosting; see
+  `domo/docs/DEPLOY.md` in the app's repo).
+- **Remote repository:** [`CafeLabsCorp/domo-landing`](https://github.com/CafeLabsCorp/domo-landing)
+  (Café Labs organization, not a personal account).
 
 ## Pipeline
 
-Não há workflow de CI/CD neste repositório — sem pasta `.github/workflows`,
-sem `vercel.json`. O deploy funciona pela integração nativa Git-Vercel: todo
-push pra `main` no GitHub aciona um build e deploy automático na Vercel
-(comportamento padrão da integração, não uma pipeline configurada à mão
-neste repo).
+There's no CI/CD workflow in this repository — no `.github/workflows`
+folder, no `vercel.json`. Deploy works through the native Git-Vercel
+integration: every push to `main` on GitHub triggers an automatic build and
+deploy on Vercel (the integration's default behavior, not a hand-configured
+pipeline in this repo).
 
-`TODO: confirmar` — settings exatos do projeto na Vercel (branch de produção,
-preview deployments em PRs, variáveis de ambiente se houver) não são
-verificáveis a partir do código deste repositório; conferir direto no
-dashboard da Vercel se precisar alterar algo.
+`TODO: confirm` — the exact Vercel project settings (production branch,
+preview deployments on PRs, environment variables if any) aren't verifiable
+from this repository's code; check the Vercel dashboard directly if you
+need to change anything.
 
-## Ambientes
+## Environments
 
-Um único ambiente de produção (`domo.cafelabs.net`, branch `main`). O projeto
-não usa branches de feature nem PRs como fluxo padrão (trabalho é feito
-direto em `main`), então não há ambiente de staging distinto em uso — a
-Vercel pode gerar preview deployments automáticos por branch/PR (padrão da
-plataforma), mas isso não é usado como parte do fluxo de trabalho deste
-projeto.
+A single production environment (`domo.cafelabs.net`, `main` branch). The
+project doesn't use feature branches or PRs as its default workflow (work
+is done directly on `main`), so there's no distinct staging environment in
+use — Vercel may generate automatic preview deployments per branch/PR (the
+platform's default), but that isn't used as part of this project's
+workflow.
 
-## Domínio/DNS
+## Domain/DNS
 
-DNS de `domo.cafelabs.net` apontado pra Vercel e confirmado no ar (registro
-em `mind/cafelabs/sites.md` do vault pessoal do mantenedor — fora deste
-repo). Sem configuração de DNS versionada aqui; é gerenciada direto no
-provedor de DNS + dashboard da Vercel.
+`domo.cafelabs.net`'s DNS points to Vercel and is confirmed live (recorded
+in the maintainer's personal vault, `mind/cafelabs/sites.md` — outside this
+repo). No DNS configuration is versioned here; it's managed directly at the
+DNS provider + Vercel dashboard.
 
 ## Rollback
 
-Sem runbook de rollback automatizado (diferente do app Domo em si, que tem
-`scripts/deploy.sh` com gate — ver `domo/docs/DEPLOY.md`). Pra reverter um
-deploy problemático:
+No automated rollback runbook (unlike the Domo app itself, which has a
+gated `scripts/deploy.sh` — see `domo/docs/DEPLOY.md`). To revert a
+problematic deploy:
 
-1. `git revert` do commit problemático em `main` e novo push (aciona um novo
-   build/deploy automático); ou
-2. Promover manualmente um deploy anterior pra produção direto no dashboard
-   da Vercel (rollback instantâneo, sem precisar de novo build).
+1. `git revert` the problematic commit on `main` and push again (triggers a
+   new automatic build/deploy); or
+2. Manually promote a previous deploy to production directly on the Vercel
+   dashboard (instant rollback, no new build needed).
 
-`TODO: confirmar` — se há preferência registrada por uma das duas opções;
-não há histórico de um rollback já ter sido necessário neste projeto.
+`TODO: confirm` — whether there's a recorded preference for either option;
+there's no history of a rollback ever being needed on this project.
 
-## Variáveis de ambiente / segredos
+## Environment variables / secrets
 
-Nenhuma. O projeto não tem backend, API keys ou integração externa — o único
-link para fora (`app.domo.cafelabs.net`) é uma URL fixa hardcoded em
-`src/app/page.tsx` (`WEB_APP_URL`), não uma variável de ambiente.
+None. The project has no backend, API keys, or external integration — the
+only outbound link (`app.domo.cafelabs.net`) is a fixed URL hardcoded in
+`src/app/page.tsx` (`WEB_APP_URL`), not an environment variable.
