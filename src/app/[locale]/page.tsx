@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import ArmarioDemo from "./ArmarioDemo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Tag } from "./Tag";
 
 const WEB_APP_URL = "https://app.domo.cafelabs.net";
@@ -29,14 +30,17 @@ export default async function Home() {
               Domo
             </span>
           </div>
-          <a
-            href="https://cafelabs.net"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-subtle transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            {tHeader("brandBy")}
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://cafelabs.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-subtle transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              {tHeader("brandBy")}
+            </a>
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 

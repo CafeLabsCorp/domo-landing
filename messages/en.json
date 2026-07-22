@@ -9,7 +9,8 @@
     "carrinho": "In cart"
   },
   "Header": {
-    "brandBy": "by Café Labs"
+    "brandBy": "by Café Labs",
+    "switchLanguage": "Switch language"
   },
   "Hero": {
     "kicker": "Shared household management",
