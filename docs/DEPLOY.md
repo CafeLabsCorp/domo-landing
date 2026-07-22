@@ -7,7 +7,7 @@
   nu da Café Labs, dedicado à landing — o app real vive em
   `app.domo.cafelabs.net`, hospedado à parte no Firebase Hosting; ver
   `domo/docs/DEPLOY.md` no repo do app).
-- **Repositório remoto:** [`CafeLabsDev/domo-landing`](https://github.com/CafeLabsDev/domo-landing)
+- **Repositório remoto:** [`CafeLabsCorp/domo-landing`](https://github.com/CafeLabsCorp/domo-landing)
   (organização Café Labs, não conta pessoal).
 
 ## Pipeline
