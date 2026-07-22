@@ -9,7 +9,8 @@
     "carrinho": "No carrinho"
   },
   "Header": {
-    "brandBy": "por Café Labs"
+    "brandBy": "por Café Labs",
+    "switchLanguage": "Trocar idioma"
   },
   "Hero": {
     "kicker": "Gestão doméstica compartilhada",
