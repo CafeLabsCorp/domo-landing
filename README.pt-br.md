@@ -14,7 +14,7 @@ Para quem está vendo este repo pela primeira vez: é uma página de marketing
 de uma única rota por locale (`/pt`, `/en`), sem backend próprio, cujo ponto
 mais interessante é uma demo interativa client-side que reproduz fielmente o
 modelo de status ternário (Tem / Em falta / No carrinho) do app real. Ver
-[`docs/ARQUITETURA.md`](docs/ARQUITETURA.md) para como isso funciona por
+[`docs/ARQUITETURA.pt-br.md`](docs/ARQUITETURA.pt-br.md) para como isso funciona por
 dentro.
 
 ## Stack
@@ -96,13 +96,13 @@ interativa (nomes dos itens, rótulos de status, mensagens de acessibilidade
 ## Identidade visual
 
 Paleta e tipografia da identidade **"Armário Aberto"**, já aplicada em todo o
-site — ver [`docs/DESIGN.md`](docs/DESIGN.md) para a spec completa (tokens de
+site — ver [`docs/DESIGN.pt-br.md`](docs/DESIGN.pt-br.md) para a spec completa (tokens de
 cor claro/escuro, tipografia, motivo de cada escolha e a divergência
 deliberada em relação à landing do Dindin).
 
 ## Deploy
 
-Vercel, domínio `domo.cafelabs.net`. Ver [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Vercel, domínio `domo.cafelabs.net`. Ver [`docs/DEPLOY.pt-br.md`](docs/DEPLOY.pt-br.md).
 
 ## Status
 

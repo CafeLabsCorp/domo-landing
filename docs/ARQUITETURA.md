@@ -1,151 +1,157 @@
-# Arquitetura — domo-landing
+**[Leia em Português](ARQUITETURA.pt-br.md)**
 
-Landing estática de página única, sem backend próprio. Este documento explica
-como o site é montado e, com mais detalhe, como funciona o modelo de estado
-da demo interativa — a parte com lógica real do projeto.
+# Architecture — domo-landing
 
-## Visão geral
+Static single-page landing, with no backend of its own. This document
+explains how the site is put together and, in more detail, how the
+interactive demo's state model works — the one part of the project with
+real logic.
 
-- **Next.js (App Router), uma única rota (`/`)** — `src/app/page.tsx` monta a
-  página inteira (header, hero, download, "como funciona", demo, footer) num
-  único componente Server Component; nada é buscado em runtime (sem
-  `fetch`/API routes) e não há roteamento client-side além de âncoras (`#`).
-- **Um único componente client (`ArmarioDemo.tsx`)** — é o único pedaço da
-  página com `"use client"` e `useState`; todo o resto é HTML estático
-  gerado no build/servidor.
-- **Sem backend, sem banco, sem autenticação** — a demo é uma simulação
-  local; nada digitado ou clicado nela é persistido ou enviado a qualquer
-  lugar (o texto "prévia local, os valores não são salvos" na própria UI é
+## Overview
+
+- **Next.js (App Router), a single route (`/`)** — `src/app/page.tsx`
+  assembles the entire page (header, hero, download, "how it works", demo,
+  footer) in a single Server Component; nothing is fetched at runtime (no
+  `fetch`/API routes) and there's no client-side routing beyond anchors
+  (`#`).
+- **A single client component (`ArmarioDemo.tsx`)** — the only piece of the
+  page with `"use client"` and `useState`; everything else is static HTML
+  generated at build/server time.
+- **No backend, no database, no authentication** — the demo is a local
+  simulation; nothing typed or clicked in it is persisted or sent anywhere
+  (the "local preview, values aren't saved" copy in the UI itself is
   literal).
-- **Deploy estático/SSR padrão do Next na Vercel** — ver
+- **Standard Next.js static/SSR deploy on Vercel** — see
   [`DEPLOY.md`](DEPLOY.md).
 
 ## Design tokens: CSS custom properties + Tailwind v4
 
-`src/app/globals.css` declara todas as cores como CSS custom properties em
-`:root` (tema claro) e as sobrescreve dentro de
-`@media (prefers-color-scheme: dark)` (tema escuro) — não há um mecanismo de
-toggle manual de tema, o site segue a preferência do sistema operacional/
-navegador.
+`src/app/globals.css` declares every color as a CSS custom property under
+`:root` (light theme) and overrides them inside
+`@media (prefers-color-scheme: dark)` (dark theme) — there's no manual
+theme-toggle mechanism; the site follows the OS/browser preference.
 
-O bloco `@theme inline` do Tailwind v4 mapeia cada variável para uma classe
-utilitária (`--color-primary: var(--primary)` → `bg-primary`,
-`text-primary`, etc.), então qualquer componente usa classes Tailwind
-normais e ganha o tema claro/escuro automaticamente, sem lógica condicional
-no JSX. O mesmo mecanismo mapeia as fontes (`--font-serif: var(--font-bitter)`,
-`--font-sans: var(--font-manrope)`).
+Tailwind v4's `@theme inline` block maps each variable to a utility class
+(`--color-primary: var(--primary)` → `bg-primary`, `text-primary`, etc.), so
+any component uses ordinary Tailwind classes and gets light/dark theming
+automatically, with no conditional logic in JSX. The same mechanism maps
+the fonts (`--font-serif: var(--font-bitter)`, `--font-sans: var(--font-manrope)`).
 
-Ver [`DESIGN.md`](DESIGN.md) para a lista completa de tokens e o motivo de
-cada valor de cor.
+See [`DESIGN.md`](DESIGN.md) for the full token list and the reasoning
+behind each color value.
 
-## Tipografia
+## Typography
 
-`layout.tsx` carrega Bitter e Manrope via `next/font/google`, o que
-self-hosta as fontes no build (sem requisição de rede em runtime) e expõe
-cada uma como uma CSS variable (`--font-bitter`, `--font-manrope`) aplicada
-na tag `<html>`. `globals.css` mapeia essas variáveis pros tokens `--font-serif`/
-`--font-sans` consumidos pelas classes Tailwind (`font-serif`, `font-sans`).
+`layout.tsx` loads Bitter and Manrope via `next/font/google`, which
+self-hosts the fonts at build time (no runtime network request) and exposes
+each one as a CSS variable (`--font-bitter`, `--font-manrope`) applied on
+the `<html>` tag. `globals.css` maps those variables to the `--font-serif`/
+`--font-sans` tokens consumed by the Tailwind classes (`font-serif`,
+`font-sans`).
 
-## O componente `Tag`
+## The `Tag` component
 
-`src/app/Tag.tsx` é o único componente de chip/label da página — usado tanto
-pros kickers de seção ("01", "Como funciona") quanto pros chips de status
-(Tem/Em falta/No carrinho) na hero, nas shelves de "como funciona" e na
-demo. `border-radius: 6px` fixo (nunca pílula) é a assinatura visual central
-da identidade "Armário Aberto" — ver `DESIGN.md` §4. Centralizar o chip num
-único componente é o que garante essa consistência sem repetir a classe em
-cada lugar que usa um status.
+`src/app/Tag.tsx` is the page's only chip/label component — used both for
+the section kickers ("01", "How it works") and for the status chips
+(Have it/Missing/In cart) in the hero, in the "how it works" shelves, and in
+the demo. A fixed `border-radius: 6px` (never a pill) is the central visual
+signature of the **"Armário Aberto"** ("Open Cupboard") identity — see
+`DESIGN.md` §4. Centralizing the chip in a single component is what
+guarantees that consistency without repeating the class everywhere a status
+is used.
 
-## Modelo de estado da demo (`ArmarioDemo.tsx` + `statuses.ts`)
+## Demo state model (`ArmarioDemo.tsx` + `statuses.ts`)
 
-Esta é a parte do projeto com lógica de verdade, então vale detalhar como e
-por que ela é modelada assim.
+This is the part of the project with real logic, so it's worth detailing
+how and why it's modeled this way.
 
-### Fonte única do modelo: `statuses.ts`
+### Single source of truth: `statuses.ts`
 
-`src/app/statuses.ts` não pertence só à demo — é importado também por
-`page.tsx` (nas visuais estáticas da hero e das shelves de "como funciona")
-e por `Tag.tsx`, garantindo que o rótulo e a cor de cada status ("Tem" /
-"Em falta" / "No carrinho") sejam sempre os mesmos em toda a página, estática
-ou interativa.
+`src/app/statuses.ts` doesn't belong only to the demo — it's also imported
+by `page.tsx` (in the hero's and "how it works" shelves' static visuals)
+and by `Tag.tsx`, guaranteeing that each status's label and color
+("Tem" / "Em falta" / "No carrinho" — "Have it" / "Missing" / "In cart") are
+always the same everywhere on the page, static or interactive.
 
-Ele define:
+It defines:
 
-- `type Status = "tem" | "falta" | "carrinho"` — o modelo ternário do item de
-  despensa do app real.
-- `STATUS_LABEL` / `STATUS_TONE_CLASSES` — rótulo em português e classes
-  Tailwind (par preenchimento/texto já checado quanto a contraste em
-  `DESIGN.md` §2) para cada status.
-- **Dois mapas de transição independentes, não um ciclo único** —
-  `PANTRY_TOGGLE` (`tem <-> falta`) e `CART_TOGGLE` (`falta <-> carrinho`).
+- `type Status = "tem" | "falta" | "carrinho"` — the real app's ternary
+  pantry-item model.
+- `STATUS_LABEL` / `STATUS_TONE_CLASSES` — the Portuguese-language label and
+  the Tailwind classes (fill/text pair, already checked for contrast in
+  `DESIGN.md` §2) for each status.
+- **Two independent transition maps, not a single cycle** —
+  `PANTRY_TOGGLE` (`tem <-> falta`) and `CART_TOGGLE` (`falta <-> carrinho`).
 
-Esse último ponto é o motivo da correção feita no commit `80e1f0d`
-("Corrige demo interativa: item no carrinho não sumia da despensa"): a
-versão anterior usava um único ciclo compartilhado
-(`tem -> falta -> carrinho -> tem`) entre as duas telas, o que fazia um item
-marcado como "no carrinho" continuar aparecendo (duplicado) no painel da
-despensa. O app Flutter real **não tem um toggle único** — cada tela só
-conhece a transição que faz sentido nela:
+That last point is why commit `80e1f0d` exists ("Corrige demo interativa:
+item no carrinho não sumia da despensa" — "Fix interactive demo: item in
+cart wasn't disappearing from the pantry"): the previous version used a
+single shared cycle (`tem -> falta -> carrinho -> tem`) across both
+screens, which made an item marked "in cart" keep showing up (duplicated)
+in the pantry panel. The real Flutter app **doesn't have a single toggle**
+— each screen only knows the transition that makes sense there:
 
-- A tela de despensa (`dispensa_page.dart` no app real) só alterna
-  `tem <-> falta`. Nunca é dali que um item vai pra "no carrinho".
-- A tela de lista de compras (`mercado_page.dart` no app real) só alterna
-  `falta <-> carrinho`.
-- A volta de `carrinho` pra `tem` não é um toque item-a-item — é uma ação em
-  lote ("Atualizar dispensa"), que fecha a compra movendo todo item
-  `carrinho` pra `tem` de uma vez.
+- The pantry screen (`dispensa_page.dart` in the real app) only toggles
+  `tem <-> falta`. An item never moves to "in cart" from there.
+- The shopping-list screen (`mercado_page.dart` in the real app) only
+  toggles `falta <-> carrinho`.
+- Going back from `carrinho` to `tem` isn't an item-by-item tap — it's a
+  batch action ("Atualizar dispensa" / "Update pantry") that closes out the
+  shopping trip by moving every `carrinho` item to `tem` at once.
 
-`ArmarioDemo.tsx` espelha essa divisão exatamente:
+`ArmarioDemo.tsx` mirrors that split exactly:
 
-| Função | Transição permitida | Espelha (app real) |
+| Function | Allowed transition | Mirrors (real app) |
 | --- | --- | --- |
-| `togglePantryStatus` | `tem <-> falta` (ignora clique se já é `carrinho`) | `dispensa_page.dart` |
-| `toggleCartStatus` | `falta <-> carrinho` (ignora clique se já é `tem`) | `mercado_page.dart` |
-| `atualizarDespensa` | todo item `carrinho` → `tem`, em lote | ação "Atualizar dispensa" |
+| `togglePantryStatus` | `tem <-> falta` (ignores the tap if already `carrinho`) | `dispensa_page.dart` |
+| `toggleCartStatus` | `falta <-> carrinho` (ignores the tap if already `tem`) | `mercado_page.dart` |
+| `atualizarDespensa` | every `carrinho` item → `tem`, in batch | the "Atualizar dispensa" action |
 
-### Derivação das duas listas visíveis
+### Deriving the two visible lists
 
-Os dois painéis da demo (Despensa / Lista de compras) não são dois pedaços de
-estado separados — são duas *views* derivadas do mesmo array `items` a cada
-render, igual ao app real:
+The demo's two panels (Pantry / Shopping list) aren't two separate pieces of
+state — they're two *views* derived from the same `items` array on every
+render, just like the real app:
 
 ```ts
 const pantryItems = items.filter((item) => item.status !== "carrinho");
 const shoppingList = items.filter((item) => item.status !== "tem");
 ```
 
-- **Despensa** mostra tudo que não está `carrinho` (um item no carrinho já
-  saiu fisicamente da despensa).
-- **Lista de compras** mostra tudo que não está `tem` (é a "view" de tudo que
-  falta comprar, incluindo o que já está no carrinho aguardando finalizar a
-  compra).
+- **Pantry** shows everything that isn't `carrinho` (an item in the cart
+  has already physically left the pantry).
+- **Shopping list** shows everything that isn't `tem` (it's the "view" of
+  everything still missing, including whatever is already in the cart
+  waiting for the trip to be finalized).
 
-Não existe uma ação separada de "adicionar à lista" — a lista nasce como
-consequência do status, do mesmo jeito que no app real (ver `DESIGN.md` §6,
-"Por que este modelo de interação").
+There's no separate "add to list" action — the list exists as a
+consequence of status, the same way it does in the real app (see
+`DESIGN.md` §6, "Why this interaction model").
 
-### Estado seedado, não vazio
+### Seeded state, not empty
 
-O array inicial (`SEED`, 5 itens) já vem misto (2 `tem`, 2 `falta`, 1
-`carrinho`) para que o resultado (uma lista de compras já populada) fique
-visível antes de qualquer interação — reconhecimento em vez de exigir que o
-visitante descubra que precisa "adicionar" algo primeiro.
+The initial array (`SEED`, 5 items) already comes mixed (2 `tem`, 2
+`falta`, 1 `carrinho`) so the payoff (an already-populated shopping list)
+is visible before any interaction — recognition instead of requiring the
+visitor to figure out they need to "add" something first.
 
-### Acessibilidade do estado
+### State accessibility
 
-- Cada linha é um `<button>` com `aria-label` descrevendo o status atual e a
-  ação (`"Leite: Tem. Toque para alternar para Em falta."`), nunca um
-  `<span>` colorido sem semântica.
-- Uma região `aria-live="polite"` (visualmente oculta via `sr-only`) anuncia
-  cada mudança de status e a atualização em lote, para paridade entre
-  usuário de leitor de tela e usuário vidente (que vê o painel mudar).
-- Transições de cor respeitam `motion-reduce:transition-none`.
-- Área de toque mínima de 44px (`min-h-11`) na linha inteira, mesmo com o
-  chip visual ficando em 32px (`h-8`) — ver `DESIGN.md` §6 para o raciocínio.
+- Each row is a `<button>` with an `aria-label` describing the current
+  status and the action (`"Leite: Tem. Toque para alternar para Em
+  falta."` — "Milk: Have it. Tap to switch to Missing."), never an
+  unstyled colored `<span>`.
+- An `aria-live="polite"` region (visually hidden via `sr-only`) announces
+  every status change and the batch update, for parity between
+  screen-reader users and sighted users (who see the panel change).
+- Color transitions respect `motion-reduce:transition-none`.
+- Minimum 44px tap target (`min-h-11`) on the whole row, even though the
+  visual chip itself stays at 32px (`h-8`) — see `DESIGN.md` §6 for the
+  reasoning.
 
-## Sem `docs/BACKEND.md`
+## No `docs/BACKEND.md`
 
-Este projeto não tem backend, banco de dados ou API própria — todo o "estado"
-existente é local ao navegador (`useState` da demo) e some ao recarregar a
-página. Por isso não há um `docs/BACKEND.md`; a seção correspondente do app
-real vive no repo do Domo (`domo/docs/BACKEND.md`).
+This project has no backend, database, or API of its own — all existing
+"state" is local to the browser (the demo's `useState`) and disappears on
+reload. That's why there's no `docs/BACKEND.md`; the real app's equivalent
+section lives in the Domo app's repo (`domo/docs/BACKEND.md`).

@@ -1,16 +1,17 @@
+**[Leia em Português](DESIGN.pt-br.md)**
+
 # Domo landing — redesign spec ("Armário Aberto")
 
-Status: **implementado** (commits `d7ed472`, `ab0f7bd`, `ea1d6ed`, `80e1f0d`
-em `src/app/`) — este documento é mantido como a referência viva de tokens
-de design (cor, tipografia, forma) e do raciocínio por trás de cada decisão,
-não só como spec histórica. Ao alterar um token de cor/tipografia no código,
-atualizar aqui também.
+Status: **implemented** (commits `d7ed472`, `ab0f7bd`, `ea1d6ed`, `80e1f0d`
+in `src/app/`) — this document is kept as the living reference for design
+tokens (color, typography, shape) and the reasoning behind each decision,
+not just as a historical spec. When changing a color/typography token in
+code, update it here too.
 
-Texto original abaixo, escrito como spec pré-implementação pela especialista
-de design (scope owner) para a `frontend-web` (implementation owner)
-executar — mantido como está por ainda descrever fielmente o que foi
-construído; ver `docs/ARQUITETURA.md` para como o modelo de estado da demo
-funciona na prática.
+Original text below, written as a pre-implementation spec by the design
+specialist (scope owner) for `frontend-web` (implementation owner) to
+execute — kept as-is since it still faithfully describes what was built;
+see `docs/ARQUITETURA.md` for how the demo's state model works in practice.
 
 This replaces the current landing (`src/app/page.tsx` + `globals.css`), which
 was built by copying the old "Sage Home" green palette and Inter 1:1 onto a
