@@ -9,14 +9,18 @@ real logic.
 
 ## Overview
 
-- **Next.js (App Router), a single route (`/`)** — `src/app/page.tsx`
-  assembles the entire page (header, hero, download, "how it works", demo,
-  footer) in a single Server Component; nothing is fetched at runtime (no
+- **Next.js (App Router), a single route per locale (`/pt`, `/en`)** —
+  `src/app/[locale]/page.tsx` assembles the entire page (header, hero,
+  download, "how it works", demo, footer) in a single async Server
+  Component (it awaits `getTranslations` for each message namespace before
+  rendering); nothing is fetched at runtime beyond that (no external
   `fetch`/API routes) and there's no client-side routing beyond anchors
-  (`#`).
+  (`#`) and the locale switch itself.
 - **A single client component (`ArmarioDemo.tsx`)** — the only piece of the
-  page with `"use client"` and `useState`; everything else is static HTML
-  generated at build/server time.
+  page with `"use client"` and `useState`; `LanguageSwitcher.tsx` is also a
+  client component (it needs `useRouter`/`usePathname` to swap locale), but
+  it carries no state of its own. Everything else is static HTML generated
+  at build/server time.
 - **No backend, no database, no authentication** — the demo is a local
   simulation; nothing typed or clicked in it is persisted or sent anywhere
   (the "local preview, values aren't saved" copy in the UI itself is
@@ -24,9 +28,45 @@ real logic.
 - **Standard Next.js static/SSR deploy on Vercel** — see
   [`DEPLOY.md`](DEPLOY.md).
 
+## Internationalization (`next-intl`)
+
+Locale-prefixed routing (`/pt`, `/en`, Portuguese default) is implemented
+with `next-intl`, wired through four files:
+
+- **`src/proxy.ts`** — the request-time entry point that resolves and
+  redirects to the right locale prefix, built on `next-intl/middleware`. In
+  Next.js 16, the file that used to be `middleware.ts` in earlier versions
+  is now named `proxy.ts` (functionality is the same, only the file
+  convention was renamed — see
+  `node_modules/next/dist/docs/01-app/01-getting-started/16-proxy.md` if
+  this looks unfamiliar). Its `matcher` excludes `/api`, `/_next`,
+  `/_vercel`, and any path with a file extension, so static assets aren't
+  routed through the locale logic.
+- **`src/i18n/routing.ts`** — declares the two supported locales
+  (`pt`, `en`) and the default (`pt`) via `defineRouting`; this is the
+  single source of truth both `proxy.ts` and `navigation.ts` read from.
+- **`src/i18n/navigation.ts`** — re-exports locale-aware `Link`,
+  `useRouter`, `usePathname` wrappers (from `next-intl/navigation`) so
+  every internal navigation automatically preserves/switches the locale
+  prefix instead of components reasoning about it manually.
+- **`src/i18n/request.ts`** — resolves which locale is active per request
+  and loads the matching `messages/<locale>.json` file for
+  `NextIntlClientProvider`/`getTranslations`.
+
+`src/app/[locale]/LanguageSwitcher.tsx` is the only piece of UI aware of
+this mechanism: a client component that reads the current locale via
+`useLocale()`, computes the other one, and calls
+`router.replace(pathname, { locale: nextLocale })` from the wrapped
+`navigation.ts` router — swapping locale without a full page reload and
+without losing the current path.
+
+All page copy — including the interactive demo's item names, status
+labels, and `aria-live`/`aria-label` accessibility strings — comes from
+`messages/pt.json`/`messages/en.json`, not hardcoded in components.
+
 ## Design tokens: CSS custom properties + Tailwind v4
 
-`src/app/globals.css` declares every color as a CSS custom property under
+`src/app/[locale]/globals.css` declares every color as a CSS custom property under
 `:root` (light theme) and overrides them inside
 `@media (prefers-color-scheme: dark)` (dark theme) — there's no manual
 theme-toggle mechanism; the site follows the OS/browser preference.
@@ -51,7 +91,7 @@ the `<html>` tag. `globals.css` maps those variables to the `--font-serif`/
 
 ## The `Tag` component
 
-`src/app/Tag.tsx` is the page's only chip/label component — used both for
+`src/app/[locale]/Tag.tsx` is the page's only chip/label component — used both for
 the section kickers ("01", "How it works") and for the status chips
 (Have it/Missing/In cart) in the hero, in the "how it works" shelves, and in
 the demo. A fixed `border-radius: 6px` (never a pill) is the central visual
@@ -67,7 +107,7 @@ how and why it's modeled this way.
 
 ### Single source of truth: `statuses.ts`
 
-`src/app/statuses.ts` doesn't belong only to the demo — it's also imported
+`src/app/[locale]/statuses.ts` doesn't belong only to the demo — it's also imported
 by `page.tsx` (in the hero's and "how it works" shelves' static visuals)
 and by `Tag.tsx`, guaranteeing that each status's label and color
 ("Tem" / "Em falta" / "No carrinho" — "Have it" / "Missing" / "In cart") are

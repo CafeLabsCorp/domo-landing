@@ -17,3 +17,8 @@ Específico deste repo pra quem trabalha com um agente:
   no commit `80e1f0d`.
 - Trabalho é feito direto na branch `main` (sem branch de feature/PR), por
   convenção do mantenedor — não abrir branch nova por padrão.
+- **Mudanças futuras significativas neste projeto devem passar pelo Forge**
+  (o time de agentes especializado do repo `forge`), em vez de serem feitas
+  ad-hoc numa sessão avulsa — ele roteia o trabalho pro especialista certo
+  (frontend, design, docs, etc.) e mantém este conjunto de docs sincronizado
+  com o código.

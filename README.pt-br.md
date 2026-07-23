@@ -67,6 +67,7 @@ src/
       layout.tsx       # fontes (Bitter/Manrope), metadata, NextIntlClientProvider
       globals.css       # tokens de design (cores claro/escuro) + @theme inline
       ArmarioDemo.tsx   # demo client-side (despensa + lista de compras)
+      LanguageSwitcher.tsx # componente client que troca o locale na URL
       statuses.ts       # modelo de status ternário compartilhado (fonte única)
       Tag.tsx           # componente do chip/tag quadrado (assinatura visual)
     favicon.ico          # fora do [locale] de propósito (favicon não varia por idioma)
@@ -74,6 +75,8 @@ src/
     routing.ts        # locales (pt, en), locale padrão (pt)
     navigation.ts      # Link/useRouter/usePathname cientes de locale
     request.ts          # resolve o arquivo de mensagens do locale ativo
+  proxy.ts             # middleware de detecção de locale do next-intl (no
+                        # Next.js 16, "middleware.ts" virou "proxy.ts")
 messages/
   pt.json, en.json    # copy completa da página, incluindo os nomes dos itens da demo
 public/

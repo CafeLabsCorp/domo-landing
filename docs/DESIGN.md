@@ -13,7 +13,9 @@ specialist (scope owner) for `frontend-web` (implementation owner) to
 execute — kept as-is since it still faithfully describes what was built;
 see `docs/ARQUITETURA.md` for how the demo's state model works in practice.
 
-This replaces the current landing (`src/app/page.tsx` + `globals.css`), which
+This replaces the current landing (`src/app/page.tsx` + `globals.css` at the
+time this spec was written, before i18n moved them under `src/app/[locale]/`
+— see `docs/ARQUITETURA.md`), which
 was built by copying the old "Sage Home" green palette and Inter 1:1 onto a
 generic hero → feature-grid → download-cards → footer skeleton. It reads as
 "a landing template with the old logo swapped in," not as Domo. This spec
@@ -80,7 +82,8 @@ unspecified otherwise by the orchestrator) — bold in *composition*, boring in
 ## 1. Divergence from Dindin's landing — explicit, checked point by point
 
 The Dindin landing (`/home/felip/projetos/dindin-landing/src/app/page.tsx` +
-`CaixinhasDemo.tsx`) was read **only as an anti-reference**. Point-by-point:
+`CaixinhasDemo.tsx` at the time this spec was written; also moved under
+`[locale]/` since) was read **only as an anti-reference**. Point-by-point:
 
 | Dimension | Dindin landing | Domo landing (this spec) |
 |---|---|---|
