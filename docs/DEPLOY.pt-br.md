@@ -59,4 +59,4 @@ não há histórico de um rollback já ter sido necessário neste projeto.
 
 Nenhuma. O projeto não tem backend, API keys ou integração externa — o único
 link para fora (`app.domo.cafelabs.net`) é uma URL fixa hardcoded em
-`src/app/page.tsx` (`WEB_APP_URL`), não uma variável de ambiente.
+`src/app/[locale]/page.tsx` (`WEB_APP_URL`), não uma variável de ambiente.

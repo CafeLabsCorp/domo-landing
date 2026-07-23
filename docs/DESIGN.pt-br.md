@@ -14,7 +14,9 @@ executar — mantido como está por ainda descrever fielmente o que foi
 construído; ver `docs/ARQUITETURA.pt-br.md` para como o modelo de estado da
 demo funciona na prática.
 
-Isto substitui a landing atual (`src/app/page.tsx` + `globals.css`), que foi
+Isto substitui a landing atual (`src/app/page.tsx` + `globals.css` na época
+em que esta spec foi escrita, antes de o i18n mover eles pra
+`src/app/[locale]/` — ver `docs/ARQUITETURA.pt-br.md`), que foi
 construída copiando a paleta verde antiga "Sage Home" e a fonte Inter 1:1
 sobre um esqueleto genérico de hero → grade de features → cards de download →
 footer. O resultado lia como "um template de landing com o logo antigo
@@ -88,7 +90,8 @@ de implementação*.
 ## 1. Divergência da landing do Dindin — explícita, checada ponto a ponto
 
 A landing do Dindin (`/home/felip/projetos/dindin-landing/src/app/page.tsx` +
-`CaixinhasDemo.tsx`) foi lida **só como anti-referência**. Ponto a ponto:
+`CaixinhasDemo.tsx` na época em que esta spec foi escrita; também movida pra
+`[locale]/` desde então) foi lida **só como anti-referência**. Ponto a ponto:
 
 | Dimensão | Landing do Dindin | Landing do Domo (esta spec) |
 |---|---|---|

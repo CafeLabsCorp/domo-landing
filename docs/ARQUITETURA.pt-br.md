@@ -8,13 +8,17 @@ da demo interativa — a parte com lógica real do projeto.
 
 ## Visão geral
 
-- **Next.js (App Router), uma única rota (`/`)** — `src/app/page.tsx` monta a
-  página inteira (header, hero, download, "como funciona", demo, footer) num
-  único componente Server Component; nada é buscado em runtime (sem
-  `fetch`/API routes) e não há roteamento client-side além de âncoras (`#`).
+- **Next.js (App Router), uma única rota por locale (`/pt`, `/en`)** —
+  `src/app/[locale]/page.tsx` monta a página inteira (header, hero,
+  download, "como funciona", demo, footer) num único componente Server
+  Component assíncrono (ele dá `await` em `getTranslations` pra cada
+  namespace de mensagem antes de renderizar); nada é buscado em runtime
+  além disso (sem `fetch`/API routes externos) e não há roteamento
+  client-side além de âncoras (`#`) e da própria troca de idioma.
 - **Um único componente client (`ArmarioDemo.tsx`)** — é o único pedaço da
-  página com `"use client"` e `useState`; todo o resto é HTML estático
-  gerado no build/servidor.
+  página com `"use client"` e `useState`; `LanguageSwitcher.tsx` também é
+  client component (precisa de `useRouter`/`usePathname`), mas não carrega
+  estado próprio. Todo o resto é HTML estático gerado no build/servidor.
 - **Sem backend, sem banco, sem autenticação** — a demo é uma simulação
   local; nada digitado ou clicado nela é persistido ou enviado a qualquer
   lugar (o texto "prévia local, os valores não são salvos" na própria UI é
@@ -22,9 +26,45 @@ da demo interativa — a parte com lógica real do projeto.
 - **Deploy estático/SSR padrão do Next na Vercel** — ver
   [`DEPLOY.pt-br.md`](DEPLOY.pt-br.md).
 
+## Internacionalização (`next-intl`)
+
+O roteamento por locale (`/pt`, `/en`, PT como padrão) é implementado com
+`next-intl`, ligado em quatro arquivos:
+
+- **`src/proxy.ts`** — o ponto de entrada em tempo de request que resolve e
+  redireciona pro prefixo de locale certo, construído sobre
+  `next-intl/middleware`. No Next.js 16, o arquivo que nas versões
+  anteriores se chamava `middleware.ts` agora se chama `proxy.ts`
+  (funcionalidade igual, só mudou a convenção de nome do arquivo — ver
+  `node_modules/next/dist/docs/01-app/01-getting-started/16-proxy.md` se
+  isso parecer estranho). O `matcher` exclui `/api`, `/_next`, `/_vercel` e
+  qualquer caminho com extensão de arquivo, pra assets estáticos não
+  passarem pela lógica de locale.
+- **`src/i18n/routing.ts`** — declara os dois locales suportados
+  (`pt`, `en`) e o padrão (`pt`) via `defineRouting`; é a fonte única que
+  tanto `proxy.ts` quanto `navigation.ts` leem.
+- **`src/i18n/navigation.ts`** — reexporta wrappers de `Link`, `useRouter`,
+  `usePathname` cientes de locale (de `next-intl/navigation`), pra qualquer
+  navegação interna preservar/trocar o prefixo de locale automaticamente
+  em vez de cada componente raciocinar sobre isso manualmente.
+- **`src/i18n/request.ts`** — resolve qual locale está ativo em cada
+  request e carrega o arquivo `messages/<locale>.json` correspondente pro
+  `NextIntlClientProvider`/`getTranslations`.
+
+`src/app/[locale]/LanguageSwitcher.tsx` é o único pedaço de UI ciente desse
+mecanismo: um componente client que lê o locale atual via `useLocale()`,
+calcula o outro, e chama `router.replace(pathname, { locale: nextLocale })`
+usando o router já embrulhado de `navigation.ts` — trocando o locale sem
+recarregar a página inteira e sem perder o caminho atual.
+
+Toda a copy da página — incluindo nomes de item da demo interativa,
+rótulos de status e as strings de acessibilidade `aria-live`/`aria-label`
+— vem de `messages/pt.json`/`messages/en.json`, não hardcoded nos
+componentes.
+
 ## Design tokens: CSS custom properties + Tailwind v4
 
-`src/app/globals.css` declara todas as cores como CSS custom properties em
+`src/app/[locale]/globals.css` declara todas as cores como CSS custom properties em
 `:root` (tema claro) e as sobrescreve dentro de
 `@media (prefers-color-scheme: dark)` (tema escuro) — não há um mecanismo de
 toggle manual de tema, o site segue a preferência do sistema operacional/
@@ -50,7 +90,7 @@ na tag `<html>`. `globals.css` mapeia essas variáveis pros tokens `--font-serif
 
 ## O componente `Tag`
 
-`src/app/Tag.tsx` é o único componente de chip/label da página — usado tanto
+`src/app/[locale]/Tag.tsx` é o único componente de chip/label da página — usado tanto
 pros kickers de seção ("01", "Como funciona") quanto pros chips de status
 (Tem/Em falta/No carrinho) na hero, nas shelves de "como funciona" e na
 demo. `border-radius: 6px` fixo (nunca pílula) é a assinatura visual central
@@ -65,7 +105,7 @@ por que ela é modelada assim.
 
 ### Fonte única do modelo: `statuses.ts`
 
-`src/app/statuses.ts` não pertence só à demo — é importado também por
+`src/app/[locale]/statuses.ts` não pertence só à demo — é importado também por
 `page.tsx` (nas visuais estáticas da hero e das shelves de "como funciona")
 e por `Tag.tsx`, garantindo que o rótulo e a cor de cada status ("Tem" /
 "Em falta" / "No carrinho") sejam sempre os mesmos em toda a página, estática
