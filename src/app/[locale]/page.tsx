@@ -70,13 +70,25 @@ export default async function Home() {
               >
                 {tHero("ctaOpenApp")}
               </a>
-              <a
-                href="#como-funciona"
-                className="scroll-cue inline-flex items-center gap-1 text-sm font-medium text-muted underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                {tHero("ctaHowItWorks")}
-                <span aria-hidden="true">↓</span>
-              </a>
+              <div className="flex items-center gap-3 text-sm font-medium text-muted">
+                <a
+                  href="#como-funciona"
+                  className="scroll-cue inline-flex items-center gap-1 underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  {tHero("ctaHowItWorks")}
+                  <span aria-hidden="true">↓</span>
+                </a>
+                <span aria-hidden="true" className="opacity-50">
+                  |
+                </span>
+                <a
+                  href="#download"
+                  className="scroll-cue inline-flex items-center gap-1 underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  {tHero("ctaDownload")}
+                  <span aria-hidden="true">↓</span>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -126,7 +138,7 @@ export default async function Home() {
         {/* Baixe o Domo — immediately below the hero (Café Labs landing
             structural rule 3: quick access to "use the product" can't be
             buried at the bottom of the page). */}
-        <section className="border-t border-border">
+        <section id="download" className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <Tag variant="kicker">{tDownload("kicker")}</Tag>
             <h2 className="mt-4 text-[2rem] font-bold font-serif text-foreground">
@@ -139,10 +151,6 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center transition-colors hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
               >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-primary"
-                />
                 <span className="font-serif text-base font-bold text-foreground">
                   {tDownload("webLabel")}
                 </span>
@@ -151,10 +159,6 @@ export default async function Home() {
               <div
                 className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
               >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-subtle"
-                />
                 <span className="font-serif text-base font-bold text-foreground">
                   {tDownload("windowsLabel")}
                 </span>
@@ -163,10 +167,6 @@ export default async function Home() {
               <div
                 className={`${CARD_CLASSES} flex flex-col items-center gap-3 p-6 text-center opacity-60`}
               >
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-0.5 rounded-full bg-subtle"
-                />
                 <span className="font-serif text-base font-bold text-foreground">
                   {tDownload("androidLabel")}
                 </span>
