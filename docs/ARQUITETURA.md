@@ -28,6 +28,54 @@ real logic.
 - **Standard Next.js static/SSR deploy on Vercel** — see
   [`DEPLOY.md`](DEPLOY.md).
 
+## Integration surface (external boundary)
+
+This is a static site with no backend of its own (hence no `docs/BACKEND.md`
+— see the closing section below), but it isn't fully isolated: it talks to
+two things outside the repo. Documented here since there's no `BACKEND.md`
+to hold it.
+
+### Vercel Analytics (`@vercel/analytics`)
+
+- **How it's addressed:** the `<Analytics />` component (from
+  `@vercel/analytics/next`) is mounted once in
+  `src/app/[locale]/layout.tsx`, inside `<body>`. It injects a small
+  client-side script that beacons page-view events to Vercel's own
+  collection endpoint (`/_vercel/insights/*`) — handled entirely by the
+  Vercel platform, not a route defined anywhere in this codebase.
+- **What goes in/out:** the script auto-collects standard pageview data
+  (URL, referrer) with no payload constructed or typed by this app's code;
+  there's no response the app reads back — it's fire-and-forget.
+- **Who can call it:** every visitor's browser, automatically on page load.
+  No authentication, no opt-in/consent UI in this codebase.
+  `TODO: confirmar` whether a cookie-consent requirement applies given the
+  product's target markets — not addressed anywhere in the current code or
+  in `docs/DEPLOY.md`.
+- **How it fails:** silently. If the beacon is blocked (ad-blocker,
+  offline) nothing in the page's rendering or behavior changes — there's no
+  error state to handle.
+- **What it changes:** nothing in the app itself; it only populates the
+  project's Vercel Analytics dashboard. Only meaningfully active when
+  deployed on Vercel's own hosting — `TODO: confirmar` its exact behavior
+  under `npm run dev` locally, not verified here.
+
+### Outbound links to other Café Labs properties
+
+Not an API exchange, just the site's only other reach beyond itself — four
+static anchors, no client-side data sent beyond the browser's own
+navigation:
+
+| Link | Target | Where |
+| --- | --- | --- |
+| `WEB_APP_URL` constant | `https://app.domo.cafelabs.net` (the real Domo app) | Hero CTA ("Abrir Domo na web") and the "Web" card in the download section, `page.tsx` |
+| `cafelabs.net` | `https://cafelabs.net` (institutional site) | Header, "por Café Labs" link |
+| GitHub | `https://github.com/CafeLabsCorp/domo` (the **app's** repo, not this landing's own) | Footer |
+| Email | `mailto:contato@cafelabs.net` | Footer |
+
+`WEB_APP_URL` is hardcoded, not an environment variable — see
+[`README.md`](../README.md#configuration) and
+[`DEPLOY.md`](DEPLOY.md#environment-variables--secrets).
+
 ## Internationalization (`next-intl`)
 
 Locale-prefixed routing (`/pt`, `/en`, Portuguese default) is implemented

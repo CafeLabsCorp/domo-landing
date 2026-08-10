@@ -57,6 +57,12 @@ não há histórico de um rollback já ter sido necessário neste projeto.
 
 ## Variáveis de ambiente / segredos
 
-Nenhuma. O projeto não tem backend, API keys ou integração externa — o único
-link para fora (`app.domo.cafelabs.net`) é uma URL fixa hardcoded em
-`src/app/[locale]/page.tsx` (`WEB_APP_URL`), não uma variável de ambiente.
+Nenhuma. O projeto não tem backend nem API keys. A única integração externa
+que ele tem — Vercel Analytics (`@vercel/analytics`, montado em
+`src/app/[locale]/layout.tsx`) — também não precisa de configuração aqui:
+é ligada automaticamente pela plataforma Vercel pra qualquer projeto
+hospedado lá, sem chave ou variável de ambiente pra setar neste repo. Ver
+[`ARQUITETURA.pt-br.md`](ARQUITETURA.pt-br.md#superfície-de-integração-fronteira-externa)
+para o detalhe completo tanto disso quanto dos links pra fora (o único
+outro sendo `WEB_APP_URL`, uma URL fixa hardcoded em
+`src/app/[locale]/page.tsx`, não uma variável de ambiente).

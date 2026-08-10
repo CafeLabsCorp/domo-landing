@@ -26,6 +26,56 @@ da demo interativa — a parte com lógica real do projeto.
 - **Deploy estático/SSR padrão do Next na Vercel** — ver
   [`DEPLOY.pt-br.md`](DEPLOY.pt-br.md).
 
+## Superfície de integração (fronteira externa)
+
+Este é um site estático sem backend próprio (por isso não há
+`docs/BACKEND.md` — ver a seção final abaixo), mas não é totalmente
+isolado: ele fala com duas coisas fora do repositório. Documentado aqui já
+que não há um `BACKEND.md` pra guardar isso.
+
+### Vercel Analytics (`@vercel/analytics`)
+
+- **Como é endereçado:** o componente `<Analytics />` (de
+  `@vercel/analytics/next`) é montado uma vez em
+  `src/app/[locale]/layout.tsx`, dentro do `<body>`. Ele injeta um pequeno
+  script client-side que envia eventos de pageview (beacon) pro endpoint de
+  coleta da própria Vercel (`/_vercel/insights/*`) — tratado inteiramente
+  pela plataforma Vercel, não uma rota definida em algum lugar deste
+  código.
+- **O que entra/sai:** o script coleta automaticamente dados padrão de
+  pageview (URL, referrer), sem payload construído ou tipado pelo código
+  desta app; não há resposta que a app leia de volta — é "dispara e
+  esquece".
+- **Quem pode chamar:** o navegador de qualquer visitante, automaticamente
+  no carregamento da página. Sem autenticação, sem UI de opt-in/consentimento
+  neste código. `TODO: confirmar` se um requisito de consentimento de
+  cookies se aplica dado o mercado-alvo do produto — não endereçado em
+  nenhum lugar do código atual nem em `docs/DEPLOY.md`.
+- **Como falha:** silenciosamente. Se o beacon for bloqueado (ad-blocker,
+  offline) nada na renderização ou comportamento da página muda — não há
+  estado de erro pra tratar.
+- **O que muda:** nada na própria app; só popula o dashboard de Vercel
+  Analytics do projeto. Só é ativo de forma significativa quando hospedado
+  na própria Vercel — `TODO: confirmar` o comportamento exato sob
+  `npm run dev` local, não verificado aqui.
+
+### Links externos pra outras propriedades da Café Labs
+
+Não é uma troca de API, só o único outro alcance do site além dele mesmo —
+quatro âncoras estáticas, sem envio de dados client-side além da navegação
+padrão do navegador:
+
+| Link | Destino | Onde |
+| --- | --- | --- |
+| Constante `WEB_APP_URL` | `https://app.domo.cafelabs.net` (o app Domo real) | CTA da hero ("Abrir Domo na web") e o card "Web" na seção de download, `page.tsx` |
+| `cafelabs.net` | `https://cafelabs.net` (site institucional) | Header, link "por Café Labs" |
+| GitHub | `https://github.com/CafeLabsCorp/domo` (repo do **app**, não desta landing) | Footer |
+| E-mail | `mailto:contato@cafelabs.net` | Footer |
+
+`WEB_APP_URL` é hardcoded, não uma variável de ambiente — ver
+[`README.md`](../README.pt-br.md#configuração) e
+[`DEPLOY.pt-br.md`](DEPLOY.pt-br.md#variáveis-de-ambiente--segredos).
+
 ## Internacionalização (`next-intl`)
 
 O roteamento por locale (`/pt`, `/en`, PT como padrão) é implementado com

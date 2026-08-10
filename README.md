@@ -53,8 +53,24 @@ npm run start    # serve the production build
 npm run lint     # eslint
 ```
 
-No environment variables and no backend of its own — the project runs the
-same on any machine with just `npm install`.
+## Configuration
+
+No environment variables and no committed config files are required — the
+project runs the same on any machine with just `npm install`, no `.env` to
+create. The only project-specific config is `.vercel/project.json`
+(git-ignored, generated locally by the Vercel CLI when you run `vercel link`;
+not needed for `npm run dev`/`build`, only if you want to run Vercel CLI
+commands like `vercel dev` against the real project).
+
+## Tests
+
+There is no test suite in this repository — no test runner is configured in
+`package.json` and there are no `*.test.*`/`*.spec.*` files. The only
+automated check is linting:
+
+```bash
+npm run lint     # eslint
+```
 
 ## Folder structure
 
