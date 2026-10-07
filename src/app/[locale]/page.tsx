@@ -25,7 +25,20 @@ export default async function Home() {
       <header className="h-16 w-full border-b border-border">
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <Image src="/domo-logo.svg" alt="Domo" width={32} height={16} />
+            <Image
+              src="/domo-logo.svg"
+              alt="Domo"
+              width={32}
+              height={16}
+              className="dark:hidden"
+            />
+            <Image
+              src="/domo-logo-dark.svg"
+              alt="Domo"
+              width={32}
+              height={16}
+              className="hidden dark:block"
+            />
             <span className="font-serif text-lg font-bold text-foreground">
               Domo
             </span>
