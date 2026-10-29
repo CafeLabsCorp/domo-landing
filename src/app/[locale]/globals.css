@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the same rule as the tokens below: system
+   preference unless the header toggle set data-theme on <html>. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+}
+
 :root {
   --background: #eef1f1; /* "ceramic stone" canvas */
   --surface: #ffffff;
@@ -80,8 +93,10 @@
   --font-sans: var(--font-manrope);
 }
 
+/* Dark theme: follows the system unless the visitor picked a theme in
+   the header toggle (next-themes sets data-theme on <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #12171c;
     --surface: #1b2128;
     --foreground: #edeff1;
@@ -118,6 +133,44 @@
     --member-2: #e0b84a;
     --member-3: #6fc2ac;
   }
+}
+
+:root[data-theme="dark"] {
+  --background: #12171c;
+  --surface: #1b2128;
+  --foreground: #edeff1;
+  --muted: #b9c1c7;
+  --subtle: #8f9aa1;
+  --border: rgba(237, 239, 241, 0.12);
+  --outline: #8d9aa6;
+
+  --primary: #9bb8de;
+  --primary-foreground: #16233d;
+  --primary-container: #223a61;
+  --primary-container-foreground: #c9d9f0;
+
+  --secondary: #c9bba8;
+
+  --tertiary: #e0b84a;
+  --tertiary-foreground: #3e2e10;
+  --tertiary-container: #4a3a14;
+  --tertiary-container-foreground: #f4e0a8;
+
+  --status-tem: #6fc2ac;
+  --status-tem-container: #163f35;
+  --status-tem-container-foreground: #bee8dd;
+
+  --status-falta: #e8897a;
+  --status-falta-container: #4a1b14;
+  --status-falta-container-foreground: #f7cfc5;
+
+  --status-carrinho: #e0b84a;
+  --status-carrinho-container: #4a3a14;
+  --status-carrinho-container-foreground: #f4e0a8;
+
+  --member-1: #9bb8de;
+  --member-2: #e0b84a;
+  --member-3: #6fc2ac;
 }
 
 html {

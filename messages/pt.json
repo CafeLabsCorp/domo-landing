@@ -10,7 +10,10 @@
   },
   "Header": {
     "brandBy": "por Café Labs",
-    "switchLanguage": "Trocar idioma"
+    "switchLanguage": "Trocar idioma",
+    "theme": "Tema",
+    "themeToLight": "Mudar pro tema claro",
+    "themeToDark": "Mudar pro tema escuro"
   },
   "Hero": {
     "kicker": "Gestão doméstica compartilhada",

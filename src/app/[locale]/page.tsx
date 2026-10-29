@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import ArmarioDemo from "./ArmarioDemo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { Tag } from "./Tag";
 
 const WEB_APP_URL = "https://app.domo.cafelabs.net";
@@ -52,6 +53,7 @@ export default async function Home() {
             >
               {tHeader("brandBy")}
             </a>
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </div>
