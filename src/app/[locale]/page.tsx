@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import ArmarioDemo from "./ArmarioDemo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+import { SiteFooter } from "./SiteFooter";
 import { Tag } from "./Tag";
 
 const WEB_APP_URL = "https://app.domo.cafelabs.net";
@@ -11,13 +12,12 @@ const CARD_CLASSES =
   "rounded-[10px] border border-border bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.05),0_4px_14px_rgba(0,0,0,0.06)]";
 
 export default async function Home() {
-  const [tHeader, tHero, tDownload, tHow, tDemo, tFooter, tStatus] = await Promise.all([
+  const [tHeader, tHero, tDownload, tHow, tDemo, tStatus] = await Promise.all([
     getTranslations("Header"),
     getTranslations("Hero"),
     getTranslations("Download"),
     getTranslations("HowItWorks"),
     getTranslations("Demo"),
-    getTranslations("Footer"),
     getTranslations("Status"),
   ]);
 
@@ -301,27 +301,7 @@ export default async function Home() {
 
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-6 py-8 text-sm text-subtle sm:flex-row sm:justify-between">
-          <span>{tFooter("brand")}</span>
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/CafeLabsCorp/domo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              GitHub
-            </a>
-            <a
-              href="mailto:contato@cafelabs.net"
-              className="transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              contato@cafelabs.net
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
